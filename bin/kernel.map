@@ -1,0 +1,516 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+idt_ptr             0x6               bin/descriptor_tables.o
+nroot_nodes         0x4               bin/initrd.o
+initrd_dev          0x4               bin/initrd.o
+gdt_entries         0x30              bin/descriptor_tables.o
+keyboard_buffer     0xff              bin/keyboard.o
+nframes             0x4               bin/paging.o
+bse_end             0x4               bin/mem.o
+tss_entry           0x68              bin/descriptor_tables.o
+initial_esp         0x4               bin/main.o
+ready_queue         0x4               bin/task.o
+dirent              0x84              bin/initrd.o
+file_headers        0x4               bin/initrd.o
+mem_end             0x4               bin/mem.o
+idt_entries         0x800             bin/descriptor_tables.o
+current_task        0x4               bin/task.o
+gdt_ptr             0x6               bin/descriptor_tables.o
+interrupt_handlers  0x400             bin/isr.o
+initrd_root         0x4               bin/initrd.o
+frames              0x4               bin/paging.o
+root_nodes          0x4               bin/initrd.o
+initrd_header       0x4               bin/initrd.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+
+.text           0x0000000000100000     0x6000
+                0x0000000000100000                code = .
+                0x0000000000100000                _code = .
+                0x0000000000100000                __code = .
+ *(.text)
+ .text          0x0000000000100000       0x2a bin/boot.o
+                0x0000000000100000                mboot
+                0x0000000000100020                start
+ *fill*         0x000000000010002a        0x6 
+ .text          0x0000000000100030       0x2d bin/gdt.o
+                0x0000000000100030                gdt_flush
+                0x000000000010004d                idt_flush
+                0x0000000000100055                tss_flush
+ *fill*         0x000000000010005d        0x3 
+ .text          0x0000000000100060      0x14c bin/int32.o
+                0x0000000000100060                int32
+                0x0000000000100060                _int32
+ *fill*         0x00000000001001ac        0x4 
+ .text          0x00000000001001b0      0x201 bin/interrupt.o
+                0x00000000001001b0                isr0
+                0x00000000001001ba                isr1
+                0x00000000001001c4                isr2
+                0x00000000001001ce                isr3
+                0x00000000001001d8                isr4
+                0x00000000001001e2                isr5
+                0x00000000001001ec                isr6
+                0x00000000001001f6                isr7
+                0x0000000000100200                isr8
+                0x0000000000100208                isr9
+                0x0000000000100212                isr10
+                0x000000000010021a                isr11
+                0x0000000000100222                isr12
+                0x000000000010022a                isr13
+                0x0000000000100232                isr14
+                0x000000000010023a                isr15
+                0x0000000000100244                isr16
+                0x000000000010024e                isr17
+                0x0000000000100258                isr18
+                0x0000000000100262                isr19
+                0x000000000010026c                isr20
+                0x0000000000100276                isr21
+                0x0000000000100280                isr22
+                0x000000000010028a                isr23
+                0x0000000000100294                isr24
+                0x000000000010029e                isr25
+                0x00000000001002a8                isr26
+                0x00000000001002b2                isr27
+                0x00000000001002bc                isr28
+                0x00000000001002c6                isr29
+                0x00000000001002d0                isr30
+                0x00000000001002da                isr31
+                0x00000000001002e4                isr128
+                0x00000000001002ee                irq0
+                0x00000000001002f8                irq1
+                0x0000000000100302                irq2
+                0x000000000010030c                irq3
+                0x0000000000100313                irq4
+                0x000000000010031a                irq5
+                0x0000000000100321                irq6
+                0x0000000000100328                irq7
+                0x000000000010032f                irq8
+                0x0000000000100336                irq9
+                0x000000000010033d                irq10
+                0x0000000000100344                irq11
+                0x000000000010034b                irq12
+                0x0000000000100352                irq13
+                0x0000000000100359                irq14
+                0x0000000000100360                irq15
+ *fill*         0x00000000001003b1        0xf 
+ .text          0x00000000001003c0       0x3b bin/process.o
+                0x00000000001003c0                read_eip
+                0x00000000001003c3                copy_page_physical
+ *fill*         0x00000000001003fb        0x1 
+ .text          0x00000000001003fc      0x4ac bin/conio.o
+                0x00000000001003fc                clrscr
+                0x0000000000100454                setForeColor
+                0x0000000000100489                setBackColor
+                0x00000000001005d1                putch
+                0x00000000001006de                puts
+                0x0000000000100718                puthex
+                0x00000000001007d0                putdec
+ .text          0x00000000001008a8      0xb37 bin/descriptor_tables.o
+                0x00000000001008a8                init_descriptor_tables
+                0x0000000000100b47                set_kernel_stack
+ *fill*         0x00000000001013df        0x1 
+ .text          0x00000000001013e0      0x168 bin/fs.o
+                0x00000000001013e0                read_fs
+                0x0000000000101422                write_fs
+                0x0000000000101464                open_fs
+                0x0000000000101497                close_fs
+                0x00000000001014be                readdir_fs
+                0x0000000000101503                finddir_fs
+ .text          0x0000000000101548      0x606 bin/initrd.o
+                0x0000000000101712                initialise_initrd
+ *fill*         0x0000000000101b4e        0x2 
+ .text          0x0000000000101b50       0xd8 bin/isr.o
+                0x0000000000101b50                register_interrupt_handler
+                0x0000000000101b6c                isr_handler
+                0x0000000000101bca                irq_handler
+ .text          0x0000000000101c28      0x403 bin/keyboard.o
+                0x0000000000101c28                setleds
+                0x0000000000101c86                initialise_keyboard
+                0x0000000000101cae                keyboard_handler
+                0x0000000000101fa5                getch
+                0x000000000010200f                kbhit
+ *fill*         0x000000000010202b        0x1 
+ .text          0x000000000010202c      0xb54 bin/kheap.o
+                0x000000000010202c                kmalloc_int
+                0x0000000000102103                kfree
+                0x000000000010211f                kmalloc_a
+                0x0000000000102142                kmalloc_p
+                0x0000000000102164                kmalloc_ap
+                0x0000000000102186                kmalloc
+                0x0000000000102458                create_heap
+                0x0000000000102595                alloc
+                0x00000000001028e2                free
+ .text          0x0000000000102b80      0x188 bin/main.o
+                0x0000000000102b80                sys_init
+                0x0000000000102c54                main
+ .text          0x0000000000102d08        0x5 bin/mem.o
+                0x0000000000102d08                count_memory
+ *fill*         0x0000000000102d0d        0x3 
+ .text          0x0000000000102d10      0x26c bin/ordered_array.o
+                0x0000000000102d10                standard_lessthan_predicate
+                0x0000000000102d1e                create_ordered_array
+                0x0000000000102d8a                place_ordered_array
+                0x0000000000102deb                destroy_ordered_array
+                0x0000000000102df0                insert_ordered_array
+                0x0000000000102ef8                lookup_ordered_array
+                0x0000000000102f36                remove_ordered_array
+ .text          0x0000000000102f7c      0x89f bin/paging.o
+                0x0000000000103107                alloc_frame
+                0x0000000000103198                free_frame
+                0x00000000001031cc                initialise_paging
+                0x00000000001033af                switch_page_directory
+                0x00000000001033e3                get_page
+                0x000000000010349d                page_fault
+                0x0000000000103714                clone_directory
+ *fill*         0x000000000010381b        0x1 
+ .text          0x000000000010381c       0x94 bin/ports.o
+                0x000000000010381c                outportb
+                0x000000000010383a                outportw
+                0x000000000010385a                inportb
+                0x0000000000103884                inportw
+ .text          0x00000000001038b0      0x18b bin/stdlib.o
+                0x00000000001038b0                reverse
+                0x000000000010390d                itoa
+                0x00000000001039bc                uitoa
+ *fill*         0x0000000000103a3b        0x1 
+ .text          0x0000000000103a3c      0x190 bin/string.o
+                0x0000000000103a3c                memcpy
+                0x0000000000103a6f                memset
+                0x0000000000103a9c                strcmp
+                0x0000000000103b3f                strcpy
+                0x0000000000103b61                strcat
+                0x0000000000103ba1                strlen
+ .text          0x0000000000103bcc      0x105 bin/syscall.o
+                0x0000000000103bcc                syscall_puts
+                0x0000000000103bf3                syscall_puthex
+                0x0000000000103c1a                syscall_putdec
+                0x0000000000103c41                initialise_syscalls
+ *fill*         0x0000000000103cd1        0x3 
+ .text          0x0000000000103cd4       0xb4 bin/system.o
+                0x0000000000103cd4                panic
+                0x0000000000103d2e                panic_assert
+ .text          0x0000000000103d88      0x3d6 bin/task.o
+                0x0000000000103d88                initialise_tasking
+                0x0000000000103e2f                move_stack
+                0x0000000000103f36                switch_task
+                0x000000000010401f                fork
+                0x000000000010411a                getpid
+                0x0000000000104126                switch_to_user_mode
+ *fill*         0x000000000010415e        0x2 
+ .text          0x0000000000104160       0x89 bin/timer.o
+                0x0000000000104172                initialise_timer
+ *fill*         0x00000000001041e9        0x3 
+ .text          0x00000000001041ec     0x107a bin/vga2.o
+                0x000000000010424e                dump_regs
+                0x0000000000104316                read_regs
+                0x0000000000104457                write_regs
+                0x0000000000104c58                dump_state
+                0x0000000000104c76                set_text_mode
+                0x000000000010524f                graphicstest
+ *fill*         0x0000000000105266        0x2 
+ .text          0x0000000000105268      0xc8b bin/vga.o
+                0x0000000000105268                int32_test
+                0x0000000000105908                abs
+                0x0000000000105924                setcolor
+                0x0000000000105978                ClearVideo
+                0x00000000001059a1                DrawPixel
+                0x00000000001059db                DrawLine
+                0x0000000000105acc                DrawRectangle
+                0x0000000000105b7a                DrawFilledRectangle
+                0x0000000000105bca                DrawCircle
+                0x0000000000105d87                DrawCharacterAt
+                0x0000000000105e7e                PutsAt
+                0x0000000000106000                . = ALIGN (0x1000)
+ *fill*         0x0000000000105ef3      0x10d 
+
+.eh_frame       0x0000000000106000     0x111c
+ .eh_frame      0x0000000000106000      0x13c bin/conio.o
+ .eh_frame      0x000000000010613c       0xe0 bin/descriptor_tables.o
+                                         0xf8 (size before relaxing)
+ .eh_frame      0x000000000010621c       0xc0 bin/fs.o
+                                         0xd8 (size before relaxing)
+ .eh_frame      0x00000000001062dc       0x98 bin/initrd.o
+                                         0xb0 (size before relaxing)
+ .eh_frame      0x0000000000106374       0x60 bin/isr.o
+                                         0x78 (size before relaxing)
+ .eh_frame      0x00000000001063d4       0xa0 bin/keyboard.o
+                                         0xb8 (size before relaxing)
+ .eh_frame      0x0000000000106474      0x1c0 bin/kheap.o
+                                        0x1d8 (size before relaxing)
+ .eh_frame      0x0000000000106634       0x3c bin/main.o
+                                         0x54 (size before relaxing)
+ .eh_frame      0x0000000000106670       0x20 bin/mem.o
+                                         0x38 (size before relaxing)
+ .eh_frame      0x0000000000106690       0xe0 bin/ordered_array.o
+                                         0xf8 (size before relaxing)
+ .eh_frame      0x0000000000106770      0x1ac bin/paging.o
+                                        0x1c4 (size before relaxing)
+ .eh_frame      0x000000000010691c       0x88 bin/ports.o
+                                         0xa0 (size before relaxing)
+ .eh_frame      0x00000000001069a4       0x68 bin/stdlib.o
+                                         0x80 (size before relaxing)
+ .eh_frame      0x0000000000106a0c       0xc0 bin/string.o
+                                         0xd8 (size before relaxing)
+ .eh_frame      0x0000000000106acc       0xc4 bin/syscall.o
+                                         0xdc (size before relaxing)
+ .eh_frame      0x0000000000106b90       0x38 bin/system.o
+                                         0x50 (size before relaxing)
+ .eh_frame      0x0000000000106bc8       0xd0 bin/task.o
+                                         0xe8 (size before relaxing)
+ .eh_frame      0x0000000000106c98       0x40 bin/timer.o
+                                         0x58 (size before relaxing)
+ .eh_frame      0x0000000000106cd8      0x2d4 bin/vga2.o
+                                        0x2ec (size before relaxing)
+ .eh_frame      0x0000000000106fac      0x170 bin/vga.o
+                                        0x188 (size before relaxing)
+
+.iplt           0x0000000000107120        0x0
+ .iplt          0x0000000000000000        0x0 bin/boot.o
+
+.rel.dyn        0x000000000010711c        0x0
+ .rel.iplt      0x0000000000000000        0x0 bin/boot.o
+ .rel.text      0x0000000000000000        0x0 bin/boot.o
+ .rel.data      0x0000000000000000        0x0 bin/boot.o
+
+.data           0x0000000000107120     0x3ee0
+                0x0000000000107120                data = .
+                0x0000000000107120                _data = .
+                0x0000000000107120                __data = .
+ *(.data)
+ .data          0x0000000000107120        0x6 bin/conio.o
+                0x0000000000107120                video_memory
+                0x0000000000107124                foreColor
+                0x0000000000107125                attrib
+ *fill*         0x0000000000107126        0x2 
+ .data          0x0000000000107128        0x0 bin/descriptor_tables.o
+ .data          0x0000000000107128        0x0 bin/fs.o
+ .data          0x0000000000107128        0x0 bin/initrd.o
+ .data          0x0000000000107128        0x0 bin/isr.o
+ *fill*         0x0000000000107128       0x18 
+ .data          0x0000000000107140      0xa80 bin/keyboard.o
+                0x0000000000107140                scan2ascii_table
+ .data          0x0000000000107bc0        0x4 bin/kheap.o
+                0x0000000000107bc0                placement_address
+ .data          0x0000000000107bc4        0x0 bin/main.o
+ .data          0x0000000000107bc4        0x0 bin/mem.o
+ .data          0x0000000000107bc4        0x0 bin/ordered_array.o
+ .data          0x0000000000107bc4        0x0 bin/paging.o
+ .data          0x0000000000107bc4        0x0 bin/ports.o
+ .data          0x0000000000107bc4        0x0 bin/stdlib.o
+ .data          0x0000000000107bc4        0x0 bin/string.o
+ .data          0x0000000000107bc4       0x10 bin/syscall.o
+                0x0000000000107bd0                num_syscalls
+ .data          0x0000000000107bd4        0x0 bin/system.o
+ .data          0x0000000000107bd4        0x4 bin/task.o
+                0x0000000000107bd4                next_pid
+ .data          0x0000000000107bd8        0x0 bin/timer.o
+ *fill*         0x0000000000107bd8        0x8 
+ .data          0x0000000000107be0     0x1b00 bin/vga2.o
+                0x0000000000107be0                g_40x25_text
+                0x0000000000107c20                g_40x50_text
+                0x0000000000107c60                g_80x25_text
+                0x0000000000107ca0                g_80x50_text
+                0x0000000000107ce0                g_90x30_text
+                0x0000000000107d20                g_90x60_text
+                0x0000000000107d60                g_640x480x2
+                0x0000000000107da0                g_320x200x4
+                0x0000000000107de0                g_640x480x16
+                0x0000000000107e20                g_720x480x16
+                0x0000000000107e60                g_320x200x256
+                0x0000000000107ea0                g_320x200x256_modex
+ .data          0x00000000001096e0        0x0 bin/vga.o
+ *(.rodata)
+ .rodata        0x00000000001096e0        0x3 bin/conio.o
+ .rodata        0x00000000001096e3        0xb bin/initrd.o
+ .rodata        0x00000000001096ee       0x16 bin/isr.o
+ .rodata        0x0000000000109704      0x120 bin/kheap.o
+ *fill*         0x0000000000109824       0x1c 
+ .rodata        0x0000000000109840      0x483 bin/main.o
+ .rodata        0x0000000000109cc3       0x35 bin/ordered_array.o
+ .rodata        0x0000000000109cf8       0x63 bin/paging.o
+ .rodata        0x0000000000109d5b       0x23 bin/system.o
+ *fill*         0x0000000000109d7e        0x2 
+ .rodata        0x0000000000109d80       0xad bin/vga2.o
+ *fill*         0x0000000000109e2d       0x13 
+ .rodata        0x0000000000109e40      0x355 bin/vga.o
+                0x000000000010b000                . = ALIGN (0x1000)
+ *fill*         0x000000000010a195      0xe6b 
+
+.igot.plt       0x000000000010b000        0x0
+ .igot.plt      0x0000000000000000        0x0 bin/boot.o
+
+.bss            0x000000000010b000     0x1edc
+                0x000000000010b000                bss = .
+                0x000000000010b000                _bss = .
+                0x000000000010b000                __bss = .
+ *(.bss)
+ .bss           0x000000000010b000        0x3 bin/conio.o
+                0x000000000010b000                cursor_x
+                0x000000000010b001                cursor_y
+                0x000000000010b002                backColor
+ *fill*         0x000000000010b003        0x1 
+ .bss           0x000000000010b004        0x0 bin/descriptor_tables.o
+ .bss           0x000000000010b004        0x4 bin/fs.o
+                0x000000000010b004                fs_root
+ .bss           0x000000000010b008        0x0 bin/initrd.o
+ .bss           0x000000000010b008        0x0 bin/isr.o
+ .bss           0x000000000010b008        0x3 bin/keyboard.o
+                0x000000000010b008                led_status
+                0x000000000010b009                keyboard_buffer_size
+                0x000000000010b00a                control_keys
+ *fill*         0x000000000010b00b        0x1 
+ .bss           0x000000000010b00c        0x4 bin/kheap.o
+                0x000000000010b00c                kheap
+ .bss           0x000000000010b010        0x0 bin/main.o
+ .bss           0x000000000010b010        0x0 bin/mem.o
+ .bss           0x000000000010b010        0x0 bin/ordered_array.o
+ .bss           0x000000000010b010        0x8 bin/paging.o
+                0x000000000010b010                kernel_directory
+                0x000000000010b014                current_directory
+ .bss           0x000000000010b018        0x0 bin/ports.o
+ .bss           0x000000000010b018        0x0 bin/stdlib.o
+ .bss           0x000000000010b018        0x0 bin/string.o
+ .bss           0x000000000010b018        0x0 bin/syscall.o
+ .bss           0x000000000010b018        0x0 bin/system.o
+ .bss           0x000000000010b018        0x0 bin/task.o
+ .bss           0x000000000010b018        0x4 bin/timer.o
+                0x000000000010b018                tick
+ .bss           0x000000000010b01c        0xc bin/vga2.o
+ .bss           0x000000000010b028        0x0 bin/vga.o
+                0x000000000010c000                . = ALIGN (0x1000)
+ *fill*         0x000000000010b028      0xfd8 
+ COMMON         0x000000000010c000      0x8e6 bin/descriptor_tables.o
+                0x000000000010c000                idt_ptr
+                0x000000000010c020                gdt_entries
+                0x000000000010c060                tss_entry
+                0x000000000010c0e0                idt_entries
+                0x000000000010c8e0                gdt_ptr
+ *fill*         0x000000000010c8e6       0x1a 
+ COMMON         0x000000000010c900       0xb4 bin/initrd.o
+                0x000000000010c900                nroot_nodes
+                0x000000000010c904                initrd_dev
+                0x000000000010c920                dirent
+                0x000000000010c9a4                file_headers
+                0x000000000010c9a8                initrd_root
+                0x000000000010c9ac                root_nodes
+                0x000000000010c9b0                initrd_header
+ *fill*         0x000000000010c9b4        0xc 
+ COMMON         0x000000000010c9c0      0x400 bin/isr.o
+                0x000000000010c9c0                interrupt_handlers
+ COMMON         0x000000000010cdc0       0xff bin/keyboard.o
+                0x000000000010cdc0                keyboard_buffer
+ *fill*         0x000000000010cebf        0x1 
+ COMMON         0x000000000010cec0        0x4 bin/main.o
+                0x000000000010cec0                initial_esp
+ COMMON         0x000000000010cec4        0x8 bin/mem.o
+                0x000000000010cec4                bse_end
+                0x000000000010cec8                mem_end
+ COMMON         0x000000000010cecc        0x8 bin/paging.o
+                0x000000000010cecc                nframes
+                0x000000000010ced0                frames
+ COMMON         0x000000000010ced4        0x8 bin/task.o
+                0x000000000010ced4                ready_queue
+                0x000000000010ced8                current_task
+                0x000000000010cedc                end = .
+                0x000000000010cedc                _end = .
+                0x000000000010cedc                __end = .
+LOAD bin/boot.o
+LOAD bin/gdt.o
+LOAD bin/int32.o
+LOAD bin/interrupt.o
+LOAD bin/process.o
+LOAD bin/conio.o
+LOAD bin/descriptor_tables.o
+LOAD bin/fs.o
+LOAD bin/initrd.o
+LOAD bin/isr.o
+LOAD bin/keyboard.o
+LOAD bin/kheap.o
+LOAD bin/main.o
+LOAD bin/mem.o
+LOAD bin/ordered_array.o
+LOAD bin/paging.o
+LOAD bin/ports.o
+LOAD bin/stdlib.o
+LOAD bin/string.o
+LOAD bin/syscall.o
+LOAD bin/system.o
+LOAD bin/task.o
+LOAD bin/timer.o
+LOAD bin/vga2.o
+LOAD bin/vga.o
+OUTPUT(bin/kernel.bin elf32-i386)
+
+.comment        0x0000000000000000       0x2a
+ .comment       0x0000000000000000       0x2a bin/conio.o
+                                         0x2b (size before relaxing)
+ .comment       0x0000000000000000       0x2b bin/descriptor_tables.o
+ .comment       0x0000000000000000       0x2b bin/fs.o
+ .comment       0x0000000000000000       0x2b bin/initrd.o
+ .comment       0x0000000000000000       0x2b bin/isr.o
+ .comment       0x0000000000000000       0x2b bin/keyboard.o
+ .comment       0x0000000000000000       0x2b bin/kheap.o
+ .comment       0x0000000000000000       0x2b bin/main.o
+ .comment       0x0000000000000000       0x2b bin/mem.o
+ .comment       0x0000000000000000       0x2b bin/ordered_array.o
+ .comment       0x0000000000000000       0x2b bin/paging.o
+ .comment       0x0000000000000000       0x2b bin/ports.o
+ .comment       0x0000000000000000       0x2b bin/stdlib.o
+ .comment       0x0000000000000000       0x2b bin/string.o
+ .comment       0x0000000000000000       0x2b bin/syscall.o
+ .comment       0x0000000000000000       0x2b bin/system.o
+ .comment       0x0000000000000000       0x2b bin/task.o
+ .comment       0x0000000000000000       0x2b bin/timer.o
+ .comment       0x0000000000000000       0x2b bin/vga2.o
+ .comment       0x0000000000000000       0x2b bin/vga.o
+
+.note.GNU-stack
+                0x0000000000000000        0x0
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/conio.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/descriptor_tables.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/fs.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/initrd.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/isr.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/keyboard.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/kheap.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/main.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/mem.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/ordered_array.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/paging.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/ports.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/stdlib.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/string.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/syscall.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/system.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/task.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/timer.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/vga2.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 bin/vga.o
