@@ -80,7 +80,7 @@ int main(struct multiboot *mboot_ptr, u32int initial_stack)
 
 	puts(prompt);
 	
-int32_test();
+	int32_test();
 
 	
     while(1)
